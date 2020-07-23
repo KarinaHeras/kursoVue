@@ -19,31 +19,62 @@ export default new Vuex.Store({
     setError(state, payload){
       state.error = payload
     },
+    setPosts(state, payload){
+      state.post = payload
+    },
     setPost(state, payload){
       state.post = payload
     },
-    mutations: {
       setPost(state, payload){
           state.post = payload
-      }
-  },
+      },
+      setEliminarPost(state, payload){
+        state.post = state.post.filter(item => item.id !== payload)
+    }
+  
   },
   actions: {
-    getPost({commit, state}){
-      const tareas = []
-      db.collection(state.usuario.email).get()
-      .then(res => {
+    getPost({commit, state}, id){
+      db.collection(state.usuario.email).doc(id).get()
+      .then(doc => {
           res.forEach(doc => {
-              console.log(doc.id)
-              console.log(doc.data())
-              let post = doc.data()
+            let post = doc.data()
               post.id = doc.id
-              post.push(tarea)
+              post.push(post)
+              commit('setpost', post)
           })
-          commit('setTareas', tareas)
+        .catch(error => console.log(error))
       })
-  },
+    },
+  editarPost({commit, state}, post){
+    db.collection(state.usuario.email).doc(post.id).update({
+        title: post.title
+    })
+    .then(() => {
+        router.push({name: 'Inicio'})
+    })
+   .catch(error => console.log(error))
 
+},
+agregarPost({commit, state}, titlePost){
+  db.collection(state.usuario.email).add({
+      title: titlePost
+  })
+  .then(doc => {
+      console.log(doc.id)
+      router.push({name: 'Inicio'})
+  })
+  .catch(error => console.log(error))
+    },
+
+    eliminarPost({commit, state}, id){
+      db.collection(state.usuario.email).doc(id).delete()
+      .then(() => {
+          // dispatch('getPost')
+          commit('setEliminarPost', id)
+      })
+      .catch(error => console.log(error))
+  },
     crearUsuario({commit}, usuario){
       auth.createUserWithEmailAndPassword(usuario.email, usuario.password)
         .then(res => {
@@ -67,12 +98,37 @@ export default new Vuex.Store({
         })
     }
   },
+  ingresoUsuario({commit}, usuario){
+    auth.signInWithEmailAndPassword(usuario.email, usuario.password)
+    .then(res => {
+        console.log(res)
+        const usuario = {
+            email: res.user.email,
+            uid: res.user.uid
+        }
+        commit('setUsuario', usuario)
+        router.push('/')
+    })
+    .catch(error => {
+        console.log(error)
+        commit('setError', error)
+    })
+},
   detectarUsuario({commit}, usuario){
     commit('setUsuario', usuario)
 },
 cerrarSesion({commit}){
   auth.signOut()
   router.push('/login')
+},
+getters:{
+  existeUsuario(state){
+      if(state.usuario === null){
+          return false
+      }else{
+          return true
+      }
+  }
 },
   modules: {
   }

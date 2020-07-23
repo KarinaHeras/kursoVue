@@ -1,24 +1,35 @@
 <template>
     <div>
-        <h1>Acceso a Usuario</h1>
-        <form @submit.prevent="loginUsuario({email: email, password: pass})">
-            <input type="email" placeholder="Ingrese email" v-model="email">
-            <input type="password" placeholder="ingrese contraseña" v-model="pass">
-       <button type="submit">Acceder</button>
+        <h1>Ingreso de usuarios</h1>
+        <form @submit.prevent="loginUsuario({email:email, password:pass})">
+            <input 
+                type="email"
+                placeholder="Ingrese email"
+                v-model="email"
+            >
+            <input 
+                type="password"
+                placeholder="Ingrese contraseña"
+                v-model="pass"
+            >
+            <button type="submit">Acceder</button>
         </form>
         <p>{{error}}</p>
     </div>
 </template>
-<script>
-import {mapActions, mapState} from 'vuex'
 
+<script>
+import { mapActions, mapState } from 'vuex'
 export default {
-    name:'Login',
-    data(){
-        return{
-            email:'',
-            pass:''
+    name: 'Login',
+    data() {
+        return {
+            email: '',
+            pass: ''
         }
+    },
+    created(){
+
     },
     methods:{
         ...mapActions(['loginUsuario'])

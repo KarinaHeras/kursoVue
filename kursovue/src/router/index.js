@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import { auth } from '../firebase'
+
 
 Vue.use(VueRouter)
 
@@ -9,6 +11,17 @@ Vue.use(VueRouter)
     path: '/registro',
     name: 'Registro',
     component: () => import(/* webpackChunkName: "about" */ '../views/Registro.vue')
+  },
+  {
+    path: '/',
+    name: 'Inicio',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Inicio.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
   }
 ]
 
@@ -17,5 +30,26 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+ 
+    router.beforeEach((to, from, next) => {
+      if (to.matched.some(record => record.meta.requiresAuth)) {
+    // esta ruta requiere autenticación, verifique si inició sesión
+    // si no, redirige a la página de inicio de sesión.
+        const usuario = auth.currentUser
+        console.log(usuario)
+    
+        if (!usuario) {
+          next({
+            path: '/login'
+          })
+        } else {
+          next()
+        }
+    
+      } else {
+        next()
+      }
+    })
+    
 
 export default router

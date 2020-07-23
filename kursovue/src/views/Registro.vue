@@ -43,7 +43,7 @@ export default {
    computed:{
         ...mapState(['error']),
         desactivar(){
-            return this.pass1 === this.pass2 && this.pass1.trim() !== ''
+            return this.pass1 === this.pass2 && this.pass1.trim() !== '' && this.pass1.length > 5
         }
     }
 }

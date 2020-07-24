@@ -1,10 +1,10 @@
 <template>
-  <div class="container mt-2">
+  <div class="container mt-2" id="app">
     <div>
-      <router-link to="/" v-if="existeUsuario" class="btn btn-dark">Inicio</router-link> |
-      <router-link to="/registro" v-if="!existeUsuario" class="btn btn-dark">Registro</router-link> |
-      <router-link to="/login" v-if="!existeUsuario" class="btn btn-dark">Login</router-link> |
-      <button @click="cerrarSesion" v-if="existeUsuario">Cerrar Sesión</button>
+      <router-link to="/" v-if="existeUsuario" class="btn btn-dark mr-2">Inicio</router-link> 
+      <router-link to="/registro" v-if="!existeUsuario" class="btn btn-dark mr-2">Registro</router-link> 
+      <router-link to="/login" v-if="!existeUsuario" class="btn btn-dark mr-2">Login</router-link> 
+      <button @click="cerrarSesion" v-if="existeUsuario" class="btn btn-dark mr-2">Cerrar Sesión</button>
     </div>
     <router-view/>
   </div>

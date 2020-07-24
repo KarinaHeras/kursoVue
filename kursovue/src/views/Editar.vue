@@ -1,11 +1,15 @@
 <template>
     <div>
         <h1>Editar</h1>
-        {{id}} - {{post}}
-        <form @submit.prevent="editarTarea(tarea)">
-            <input type="text" v-model="post.title">
-            <button>Editar</button>
+        <form @submit.prevent="editarPost(post)">
+            <input type="text" v-model="$v.post.title.$model" class="form-control mb-2">
+            <button class="btn btn-primary" :disabled="$v.$invalid" >Editar</button>
         </form>
+        <small class="text-danger d-block" v-if="!$v.tarea.nombre.required">Campo Requerido</small>
+    <small class="text-danger d-block" v-if="!$v.tarea.nombre.minLength">Mínimo 4 carácteres</small>
+    <p>    {{$v.post.title}}</p>
+        <p>    {{$v.post.contenido}}</p>
+
     </div>
 </template>
 
@@ -26,6 +30,18 @@ export default {
     },
     computed:{
         ...mapState(['post'])
+    },
+     validations: {
+    post: {
+      title: {
+        required,
+        minLength: minLength(4)
+      },
+      contenido: {
+        required,
+        minLength: minLength(4)
+      }
     }
+  }
 }
 </script>

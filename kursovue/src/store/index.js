@@ -14,7 +14,8 @@ export default new Vuex.Store({
     post: {
       title: '',
       contenido:'',
-      id: ''
+      id: '',
+      texto:''
     },
     carga: false
   },
@@ -39,6 +40,11 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    buscador({commit, state}, payload){
+      console.log(payload);
+      state.texto = payload.tolowerCase();
+
+    },
     eliminarPost({
       commit,
       state
@@ -117,7 +123,7 @@ export default new Vuex.Store({
     crearUsuario({
       commit
     }, usuario) {
-      auth.createUserWithEmailAndPassword(usuario.email, usuario.password)
+      auth.createUserWithEmailAndPassword(usuario.email, usuario.password,payload.pass)
         .then(res => {
           console.log(res)
           const usuarioCreado = {
@@ -178,7 +184,19 @@ export default new Vuex.Store({
       } else {
         return true
       }
-    }
+    
   },
-  modules: {}
+  arrayFiltrado(state){
+let arregloFiltrado= []
+  for(let post of state.post){
+    let title = post.title.tolowerCase();
+    if(title.indexOf(state.texto) >= 0){
+      arregloFiltrado.push(post)
+    }
+
+    
+  }
+  return arregloFiltrado;
+}
+  }
 })

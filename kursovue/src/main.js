@@ -9,7 +9,11 @@ import store from './store'
 Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+const firebaseApp = firebase.initializeApp(config);
 
+firebaseApp.firestore().settings({timestampsInSnapshots: true})
+
+export default firebaseApp.firestore()
 auth.onAuthStateChanged(user => {
   
   if(user){

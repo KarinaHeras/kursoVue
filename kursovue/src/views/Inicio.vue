@@ -1,15 +1,19 @@
 <template>
   <div>
     <h1>Ruta protegida</h1>
-    <router-link to="/agregar">
+    <router-link :to="{name: 'agregar'}">
       <button class="btn btn-primary mb-2">Agregar</button>
     </router-link>
+    <form @submit.prevent="buscador(texto)">
+        <input type="text" placeholder="buscar...." class="form-control mt-5" v-model="texto" v-on:keyup="buscador(texto)">
+    </form>
     <div v-if="carga" class="text-center mt-5">
       <h3>Cargando Contenido...</h3>
       <pulse-loader :loading="carga"></pulse-loader>
     </div>
+   
     <ul class="list-group" v-if="!carga">
-      <li v-for="(item, index) in posts" :key="index" class="list-group-item">
+      <li v-for="item of arregloFiltrado" :key="item.id" class="list-group-item">
           <p>{{item.id}} </p>
            <p> {{item.title}}</p>
             <p> {{item.contenido}}</p>
@@ -25,14 +29,21 @@
 
 <script>
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
     name: 'Inicio',
+
+    data(){
+        return{
+            texto:''
+        }
+    },
     computed:{
-        ...mapState(['usuario', 'posts', 'carga'])
+        ...mapState(['usuario', 'posts', 'carga']),
+        ...mapGetters(['arregloFiltrado'])
     },
      methods:{
-        ...mapActions(['getPost', 'eliminarPost'])
+        ...mapActions(['getPost', 'eliminarPost', 'buscador'])
     },
     computed:{
         ...mapState(['usuario', 'post'])
@@ -43,5 +54,6 @@ export default {
     created(){
         this.getPost()
     },
+    
 }
 </script>

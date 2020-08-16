@@ -42,17 +42,14 @@ export default {
     ...mapActions(["ingresoUsuario"])
   },
   computed: {
-    ...mapState(["error"])
+    ...mapState(["error"]),
+   
   },
-  validations: {
-    email: {
-      required,
-      email
-    },
-    pass: {
-      required,
-      minLength: minLength(6)
-    }
+validations:{
+    email:{required, email},
+    pass:{required, minLength: minLength(6) }
   }
-};
+    
+  }
+
 </script>

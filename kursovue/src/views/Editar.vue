@@ -3,6 +3,7 @@
         <h1>Editar</h1>
         <form @submit.prevent="editarPost(post)">
             <input type="text" v-model="$v.post.title.$model" class="form-control mb-2">
+             <input type="text" v-model="$v.post.contenido.$model" class="form-control mb-2">
             <button class="btn btn-primary" :disabled="$v.$invalid" >Editar</button>
         </form>
         <small class="text-danger d-block" v-if="!$v.tarea.nombre.required">Campo Requerido</small>
@@ -14,6 +15,8 @@
 </template>
 
 <script>
+import { required, minLength } from "vuelidate/lib/validators";
+
 import {mapActions, mapState} from 'vuex'
 export default {
     name: 'Editar',
